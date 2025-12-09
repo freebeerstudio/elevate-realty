@@ -15,6 +15,11 @@
   padding: 0.75rem 0;
 }
 
+:global(.dark) .header.scrolled {
+  background: rgba(15, 26, 26, 0.95);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
 .container {
   max-width: 1400px;
   margin: 0 auto;
@@ -60,6 +65,10 @@
   letter-spacing: -0.02em;
 }
 
+:global(.dark) .logoName {
+  color: var(--color-gold);
+}
+
 .logoTagline {
   font-family: var(--font-body);
   font-size: 0.7rem;
@@ -67,6 +76,10 @@
   text-transform: uppercase;
   letter-spacing: 0.15em;
   font-weight: 500;
+}
+
+:global(.dark) .logoTagline {
+  color: var(--color-warm-gray-light);
 }
 
 .nav {
@@ -86,6 +99,10 @@
   transition: color 0.3s ease;
 }
 
+:global(.dark) .navLink {
+  color: #f0ede8;
+}
+
 .navLink::after {
   content: '';
   position: absolute;
@@ -103,6 +120,10 @@
   color: var(--color-forest);
 }
 
+:global(.dark) .navLink:hover {
+  color: var(--color-gold);
+}
+
 .navLink:hover::after {
   transform: scaleX(1);
   transform-origin: left;
@@ -114,6 +135,14 @@
   gap: 1.5rem;
 }
 
+.themeToggle {
+  color: var(--color-forest);
+}
+
+:global(.dark) .themeToggle {
+  color: var(--color-gold);
+}
+
 .phone {
   display: flex;
   align-items: center;
@@ -123,6 +152,10 @@
   color: var(--color-forest);
   text-decoration: none;
   transition: color 0.3s ease;
+}
+
+:global(.dark) .phone {
+  color: var(--color-gold-light);
 }
 
 .phone:hover {
@@ -151,6 +184,10 @@
   padding: 0.5rem;
 }
 
+:global(.dark) .mobileMenuButton {
+  color: var(--color-gold);
+}
+
 .mobileMenu {
   position: absolute;
   top: 100%;
@@ -160,6 +197,12 @@
   border-top: 1px solid var(--color-cream-dark);
   box-shadow: 0 20px 40px rgba(26, 58, 58, 0.15);
   overflow: hidden;
+}
+
+:global(.dark) .mobileMenu {
+  background: #0f1a1a;
+  border-top-color: rgba(212, 168, 83, 0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 .mobileNav {
@@ -176,6 +219,11 @@
   padding: 0.75rem 0;
   border-bottom: 1px solid var(--color-cream-dark);
   text-decoration: none;
+}
+
+:global(.dark) .mobileNavLink {
+  color: #f0ede8;
+  border-bottom-color: rgba(212, 168, 83, 0.1);
 }
 
 .mobilePhone {

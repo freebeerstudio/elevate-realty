@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Phone, Menu, X, MapPin } from 'lucide-react'
+import { ThemeToggle } from './ui/theme-toggle'
 import styles from './Header.module.css'
 
 export function Header() {
@@ -59,6 +60,7 @@ export function Header() {
             <Phone size={18} />
             <span>(417) 413-1132</span>
           </a>
+          <ThemeToggle className={styles.themeToggle} />
           <motion.a
             href="#contact"
             className={styles.ctaButton}
