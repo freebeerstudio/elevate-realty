@@ -51,16 +51,16 @@
 }
 
 .card {
-  background: white;
+  background: var(--color-cream-dark);
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(26, 58, 58, 0.06);
+  box-shadow: var(--shadow-soft);
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 25px 60px rgba(26, 58, 58, 0.15);
+  box-shadow: var(--shadow-dramatic);
 }
 
 .imageWrapper {
@@ -109,7 +109,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--color-cream);
   transition: all 0.3s ease;
 }
 

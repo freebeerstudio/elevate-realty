@@ -71,6 +71,39 @@
   --shadow-gold: 0 4px 20px rgba(212, 168, 83, 0.3);
 }
 
+/* ============================================================================
+   DARK MODE - Auto-switching brand variables
+   When .dark class is present, all brand colors swap automatically.
+   This ensures CSS modules using var(--color-*) work in dark mode.
+   ============================================================================ */
+.dark {
+  /* Invert the cream/charcoal relationship */
+  --color-cream: #0f1a1a;           /* Deep forest replaces cream */
+  --color-cream-dark: #162424;      /* Slightly lighter forest */
+  --color-charcoal: #faf8f5;        /* Cream text on dark bg */
+  --color-charcoal-soft: #f0ede8;   /* Softer cream */
+
+  /* Forest colors lighten for visibility */
+  --color-forest: #3a6666;          /* Lighter forest for dark bg */
+  --color-forest-light: #4a7a7a;
+  --color-forest-dark: #1a3a3a;     /* Original forest as darkest */
+
+  /* Gold stays prominent (brand accent) */
+  --color-gold: #e8c77a;            /* Brighter gold for dark bg */
+  --color-gold-light: #f0d590;
+  --color-gold-muted: #d4a853;
+
+  /* Warm grays lighten */
+  --color-warm-gray: #9a9590;       /* Lighter gray text */
+  --color-warm-gray-light: #b5b0ab;
+
+  /* Dark mode shadows */
+  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.4);
+  --shadow-dramatic: 0 20px 60px rgba(0, 0, 0, 0.5);
+  --shadow-gold: 0 4px 20px rgba(232, 199, 122, 0.3);
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
