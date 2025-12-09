@@ -348,3 +348,21 @@
     display: none;
   }
 }
+
+/* Dark mode overrides for Hero */
+:global(.dark) .bgOverlay {
+  background: linear-gradient(135deg, transparent 40%, rgba(15, 26, 26, 0.8) 100%);
+}
+
+:global(.dark) .bgPattern {
+  background-image:
+    linear-gradient(rgba(250, 248, 245, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(250, 248, 245, 0.03) 1px, transparent 1px);
+}
+
+:global(.dark) .bgGradient {
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(232, 199, 122, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(58, 102, 102, 0.05) 0%, transparent 50%),
+    linear-gradient(180deg, var(--color-cream) 0%, var(--color-cream-dark) 100%);
+}

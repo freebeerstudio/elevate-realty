@@ -1,6 +1,6 @@
 .services {
   padding: 8rem 0;
-  background: var(--color-forest-dark);
+  background: var(--color-fixed-forest-dark);
   position: relative;
   overflow: hidden;
 }
@@ -43,7 +43,7 @@
   font-family: var(--font-display);
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 500;
-  color: var(--color-cream);
+  color: var(--color-fixed-cream);
   margin-bottom: 1rem;
   line-height: 1.15;
 }
@@ -121,7 +121,7 @@
   font-family: var(--font-display);
   font-size: 1.4rem;
   font-weight: 500;
-  color: var(--color-cream);
+  color: var(--color-fixed-cream);
   margin-bottom: 0.75rem;
 }
 

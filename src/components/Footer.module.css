@@ -1,5 +1,5 @@
 .footer {
-  background: var(--color-charcoal);
+  background: var(--color-fixed-dark);
   padding: 5rem 0 2rem;
 }
 
@@ -52,7 +52,7 @@
   font-family: var(--font-display);
   font-size: 1.2rem;
   font-weight: 600;
-  color: var(--color-cream);
+  color: var(--color-fixed-cream);
   line-height: 1.1;
 }
 
@@ -104,7 +104,7 @@
   font-family: var(--font-display);
   font-size: 1rem;
   font-weight: 500;
-  color: var(--color-cream);
+  color: var(--color-fixed-cream);
   margin-bottom: 1.25rem;
 }
 

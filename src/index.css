@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
 
 :root {
-  /* Core palette */
+  /* Core palette - these swap in dark mode */
   --color-forest: #1a3a3a;
   --color-forest-light: #2a5454;
   --color-forest-dark: #0f2626;
@@ -14,6 +14,13 @@
   --color-charcoal-soft: #2a2a2a;
   --color-warm-gray: #6b6560;
   --color-warm-gray-light: #9a9590;
+
+  /* Fixed colors - these NEVER change (for intentionally dark/light sections) */
+  --color-fixed-dark: #1c1c1c;
+  --color-fixed-dark-soft: #2a2a2a;
+  --color-fixed-forest-dark: #0f2626;
+  --color-fixed-cream: #faf8f5;
+  --color-fixed-cream-dark: #f0ede8;
 
   /* Typography - Fonts */
   --font-display: 'Playfair Display', Georgia, serif;
