@@ -1,19 +1,14 @@
 /**
  * Hero Component - Tailwind Version
  *
- * BEFORE: Hero.tsx (145 lines) + Hero.module.css (350 lines) = 495 lines total
- * AFTER: HeroV2.tsx (~180 lines) = single file with co-located styles
- *
- * Key improvements:
- * 1. Styles co-located with markup - no mental context switching
- * 2. Responsive built into class names (lg:, md:, sm:)
- * 3. Same visual output, single file
+ * Same visual design as the CSS Modules version, but with styles co-located.
+ * Uses inline styles for brand colors to avoid Tailwind configuration complexity.
  */
 
 import { motion } from 'framer-motion'
 import { ArrowRight, Play, MapPin, Star } from 'lucide-react'
 
-// Brand colors as constants (in production, these come from tailwind.config)
+// Brand colors (matches CSS variables in index.css)
 const colors = {
   forest: '#1a3a3a',
   forestLight: '#2a5454',
@@ -25,7 +20,7 @@ const colors = {
   warmGray: '#6b6560',
 }
 
-// Animation variants - reusable across components
+// Animation variants
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
@@ -47,8 +42,12 @@ const stats = [
 export function HeroV2() {
   return (
     <section
-      className="relative min-h-screen flex items-center overflow-hidden"
       style={{
+        position: 'relative',
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        overflow: 'hidden',
         padding: '8rem 0 4rem',
         background: `
           radial-gradient(ellipse at 20% 80%, rgba(212, 168, 83, 0.08) 0%, transparent 50%),
@@ -59,201 +58,313 @@ export function HeroV2() {
     >
       {/* Grid pattern overlay */}
       <div
-        className="absolute inset-0 opacity-30 pointer-events-none"
         style={{
+          position: 'absolute',
+          inset: 0,
+          opacity: 0.3,
+          pointerEvents: 'none',
           backgroundImage: 'linear-gradient(rgba(26,58,58,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(26,58,58,0.03) 1px, transparent 1px)',
           backgroundSize: '60px 60px',
           maskImage: 'radial-gradient(ellipse at center, black 30%, transparent 70%)',
         }}
       />
 
-      {/* Main content */}
-      <div className="relative z-10 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Left column - Content */}
+      {/* Diagonal overlay */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'linear-gradient(135deg, transparent 40%, rgba(250, 248, 245, 0.8) 100%)',
+        }}
+      />
+
+      {/* Main container - matches CSS Modules exactly */}
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 2,
+          maxWidth: '1400px',
+          margin: '0 auto',
+          padding: '0 2rem',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: '4rem',
+          alignItems: 'center',
+          width: '100%',
+        }}
+        className="hero-container"
+      >
+        {/* Left column - Content */}
+        <motion.div
+          variants={staggerContainer}
+          initial="initial"
+          animate="animate"
+          style={{ maxWidth: '600px' }}
+          className="hero-content"
+        >
+          {/* Trust badge */}
           <motion.div
-            variants={staggerContainer}
-            initial="initial"
-            animate="animate"
-            className="max-w-xl lg:max-w-[600px] text-center lg:text-left"
+            variants={fadeInUp}
+            transition={{ duration: 0.6 }}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              backgroundColor: 'rgba(26, 58, 58, 0.08)',
+              border: '1px solid rgba(26, 58, 58, 0.1)',
+              padding: '0.5rem 1rem',
+              borderRadius: '100px',
+              fontSize: '0.8rem',
+              fontWeight: 500,
+              color: colors.forest,
+              marginBottom: '1.5rem',
+            }}
           >
-            {/* Trust badge */}
-            <motion.div
-              variants={fadeInUp}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium mb-6"
+            <Star size={14} style={{ color: colors.gold }} />
+            <span>Trusted by 500+ families in Southwest Missouri</span>
+          </motion.div>
+
+          {/* Headline */}
+          <motion.h1
+            variants={fadeInUp}
+            transition={{ duration: 0.8 }}
+            style={{
+              fontFamily: "'Playfair Display', Georgia, serif",
+              fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+              fontWeight: 500,
+              lineHeight: 1.1,
+              color: colors.charcoal,
+              marginBottom: '1.5rem',
+              letterSpacing: '-0.02em',
+            }}
+          >
+            Your Journey to the
+            <span
               style={{
-                backgroundColor: `${colors.forest}10`,
-                border: `1px solid ${colors.forest}15`,
                 color: colors.forest,
+                position: 'relative',
               }}
             >
-              <Star className="w-3.5 h-3.5" style={{ color: colors.gold }} />
-              Trusted by 500+ families in Southwest Missouri
-            </motion.div>
-
-            {/* Headline */}
-            <motion.h1
-              variants={fadeInUp}
-              transition={{ duration: 0.8 }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tight mb-6"
-              style={{
-                fontFamily: "'Playfair Display', Georgia, serif",
-                color: colors.charcoal,
-              }}
-            >
-              Your Journey to the
-              <span className="relative" style={{ color: colors.forest }}>
-                {' '}Perfect Home
-                <span
-                  className="absolute bottom-1 left-0 right-0 h-3 -z-10"
-                  style={{
-                    background: `linear-gradient(90deg, ${colors.gold}, ${colors.goldLight})`,
-                    opacity: 0.3,
-                  }}
-                />
-              </span>
-              <br />Starts Here
-            </motion.h1>
-
-            {/* Subheadline */}
-            <motion.p
-              variants={fadeInUp}
-              transition={{ duration: 0.6 }}
-              className="text-lg leading-relaxed mb-8 max-w-[520px] mx-auto lg:mx-0"
-              style={{ color: colors.warmGray }}
-            >
-              Elevate Real Estate Group delivers personalized solutions for buying and
-              selling homes in Springfield and surrounding communities. Experience real
-              estate done differently.
-            </motion.p>
-
-            {/* CTAs */}
-            <motion.div
-              variants={fadeInUp}
-              transition={{ duration: 0.6 }}
-              className="flex flex-col sm:flex-row flex-wrap justify-center lg:justify-start gap-4 mb-12"
-            >
-              <motion.a
-                href="#contact"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-semibold text-white transition-shadow duration-300"
+              {' '}Perfect Home
+              <span
                 style={{
-                  background: `linear-gradient(135deg, ${colors.forest} 0%, ${colors.forestLight} 100%)`,
-                  boxShadow: '0 8px 30px rgba(26, 58, 58, 0.25)',
+                  position: 'absolute',
+                  bottom: '0.1em',
+                  left: 0,
+                  right: 0,
+                  height: '0.3em',
+                  background: `linear-gradient(90deg, ${colors.gold}, ${colors.goldLight})`,
+                  opacity: 0.3,
+                  zIndex: -1,
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 12px 40px rgba(26, 58, 58, 0.35)'}
-                onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 8px 30px rgba(26, 58, 58, 0.25)'}
-              >
-                Start Your Search
-                <ArrowRight className="w-4 h-4" />
-              </motion.a>
-              <motion.a
-                href="#about"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="inline-flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-medium transition-colors duration-300"
-                style={{
-                  border: `2px solid ${colors.creamDark}`,
-                  color: colors.charcoal,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = colors.gold
-                  e.currentTarget.style.backgroundColor = `${colors.gold}10`
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = colors.creamDark
-                  e.currentTarget.style.backgroundColor = 'transparent'
-                }}
-              >
-                <Play className="w-4 h-4" />
-                Watch Our Story
-              </motion.a>
-            </motion.div>
+              />
+            </span>
+            <br />Starts Here
+          </motion.h1>
 
-            {/* Stats */}
-            <motion.div
-              variants={fadeInUp}
-              transition={{ duration: 0.6 }}
-              className="flex items-center justify-center lg:justify-start gap-6 sm:gap-8 pt-6"
-              style={{ borderTop: `1px solid ${colors.creamDark}` }}
-            >
-              {stats.map((stat, i) => (
-                <div key={stat.label} className="flex items-center gap-6 sm:gap-8">
-                  {i > 0 && (
-                    <div
-                      className="hidden sm:block w-px h-10"
-                      style={{ backgroundColor: colors.creamDark }}
-                    />
-                  )}
-                  <div className="flex flex-col items-center lg:items-start">
-                    <span
-                      className="text-xl sm:text-2xl font-semibold"
-                      style={{
-                        fontFamily: "'Playfair Display', Georgia, serif",
-                        color: colors.forest,
-                      }}
-                    >
-                      {stat.value}
-                    </span>
-                    <span
-                      className="text-[10px] sm:text-xs uppercase tracking-wider mt-1"
-                      style={{ color: colors.warmGray }}
-                    >
-                      {stat.label}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </motion.div>
-          </motion.div>
-
-          {/* Right column - Visual */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.4 }}
-            className="relative max-w-[600px] mx-auto lg:max-w-none"
+          {/* Subheadline */}
+          <motion.p
+            variants={fadeInUp}
+            transition={{ duration: 0.6 }}
+            style={{
+              fontSize: '1.125rem',
+              lineHeight: 1.7,
+              color: colors.warmGray,
+              marginBottom: '2rem',
+              maxWidth: '520px',
+            }}
           >
-            <div
-              className="relative rounded-3xl overflow-hidden"
-              style={{ boxShadow: '0 30px 80px rgba(26, 58, 58, 0.2)' }}
-            >
-              <img
-                src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-                alt="Beautiful modern home in Springfield"
-                className="w-full object-cover"
-                style={{ height: 'clamp(350px, 50vw, 550px)' }}
-              />
-              <div
-                className="absolute inset-0"
-                style={{
-                  background: `linear-gradient(180deg, transparent 60%, ${colors.forest}66 100%)`,
-                }}
-              />
-            </div>
+            Elevate Real Estate Group delivers personalized solutions for buying and
+            selling homes in Springfield and surrounding communities. Experience real
+            estate done differently.
+          </motion.p>
 
-            {/* Floating card */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 1.1 }}
-              className="absolute -bottom-5 left-1/2 -translate-x-1/2 lg:left-auto lg:-left-8 lg:translate-x-0 flex items-center gap-4 bg-white px-5 py-4 rounded-2xl"
-              style={{ boxShadow: '0 15px 50px rgba(26, 58, 58, 0.15)' }}
+          {/* CTAs */}
+          <motion.div
+            variants={fadeInUp}
+            transition={{ duration: 0.6 }}
+            style={{
+              display: 'flex',
+              gap: '1rem',
+              marginBottom: '3rem',
+            }}
+            className="hero-ctas"
+          >
+            <motion.a
+              href="#contact"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                background: `linear-gradient(135deg, ${colors.forest} 0%, ${colors.forestLight} 100%)`,
+                color: 'white',
+                padding: '1rem 2rem',
+                borderRadius: '12px',
+                fontSize: '1rem',
+                fontWeight: 600,
+                textDecoration: 'none',
+                boxShadow: '0 8px 30px rgba(26, 58, 58, 0.25)',
+                transition: 'box-shadow 0.3s ease',
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 12px 40px rgba(26, 58, 58, 0.35)'}
+              onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 8px 30px rgba(26, 58, 58, 0.25)'}
             >
-              <MapPin className="w-5 h-5" style={{ color: colors.gold }} />
-              <div>
-                <span className="block font-semibold" style={{ color: colors.charcoal }}>
-                  Springfield, MO
-                </span>
-                <span className="block text-sm" style={{ color: colors.warmGray }}>
-                  & Surrounding Areas
-                </span>
-              </div>
-            </motion.div>
+              <span>Start Your Search</span>
+              <ArrowRight size={18} />
+            </motion.a>
+            <motion.a
+              href="#about"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                background: 'transparent',
+                color: colors.charcoal,
+                padding: '1rem 1.5rem',
+                borderRadius: '12px',
+                fontSize: '1rem',
+                fontWeight: 500,
+                textDecoration: 'none',
+                border: `2px solid ${colors.creamDark}`,
+                transition: 'all 0.3s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = colors.gold
+                e.currentTarget.style.background = 'rgba(212, 168, 83, 0.05)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = colors.creamDark
+                e.currentTarget.style.background = 'transparent'
+              }}
+            >
+              <Play size={18} />
+              <span>Watch Our Story</span>
+            </motion.a>
           </motion.div>
-        </div>
+
+          {/* Stats */}
+          <motion.div
+            variants={fadeInUp}
+            transition={{ duration: 0.6 }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '2rem',
+              paddingTop: '1.5rem',
+              borderTop: `1px solid ${colors.creamDark}`,
+            }}
+            className="hero-stats"
+          >
+            {stats.map((stat, i) => (
+              <div key={stat.label} style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+                {i > 0 && (
+                  <div
+                    style={{
+                      width: '1px',
+                      height: '40px',
+                      backgroundColor: colors.creamDark,
+                    }}
+                    className="stat-divider"
+                  />
+                )}
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span
+                    style={{
+                      fontFamily: "'Playfair Display', Georgia, serif",
+                      fontSize: '1.75rem',
+                      fontWeight: 600,
+                      color: colors.forest,
+                      lineHeight: 1,
+                    }}
+                  >
+                    {stat.value}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: '0.8rem',
+                      color: colors.warmGray,
+                      marginTop: '0.25rem',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    {stat.label}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </motion.div>
+
+        {/* Right column - Visual */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.4 }}
+          style={{ position: 'relative' }}
+          className="hero-visual"
+        >
+          <div
+            style={{
+              position: 'relative',
+              borderRadius: '24px',
+              overflow: 'hidden',
+              boxShadow: '0 30px 80px rgba(26, 58, 58, 0.2)',
+            }}
+          >
+            <img
+              src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+              alt="Beautiful modern home in Springfield"
+              style={{
+                width: '100%',
+                height: '550px',
+                objectFit: 'cover',
+              }}
+              className="hero-image"
+            />
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(180deg, transparent 60%, rgba(26, 58, 58, 0.4) 100%)',
+              }}
+            />
+          </div>
+
+          {/* Floating card */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 1.1 }}
+            style={{
+              position: 'absolute',
+              bottom: '-20px',
+              left: '-30px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem',
+              background: 'white',
+              padding: '1.25rem 1.5rem',
+              borderRadius: '16px',
+              boxShadow: '0 15px 50px rgba(26, 58, 58, 0.15)',
+            }}
+            className="floating-card"
+          >
+            <MapPin size={20} style={{ color: colors.gold }} />
+            <div>
+              <span style={{ display: 'block', fontWeight: 600, color: colors.charcoal, fontSize: '1rem' }}>
+                Springfield, MO
+              </span>
+              <span style={{ display: 'block', fontSize: '0.8rem', color: colors.warmGray }}>
+                & Surrounding Areas
+              </span>
+            </div>
+          </motion.div>
+        </motion.div>
       </div>
 
       {/* Scroll indicator */}
@@ -261,22 +372,96 @@ export function HeroV2() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="hidden sm:flex absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-3"
+        style={{
+          position: 'absolute',
+          bottom: '2rem',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '0.75rem',
+        }}
+        className="scroll-indicator"
       >
         <div
-          className="w-px h-10"
           style={{
+            width: '1px',
+            height: '40px',
             background: `linear-gradient(180deg, ${colors.forest}, transparent)`,
             animation: 'scrollPulse 2s ease-in-out infinite',
           }}
         />
         <span
-          className="text-[10px] uppercase tracking-widest"
-          style={{ color: colors.warmGray }}
+          style={{
+            fontSize: '0.7rem',
+            textTransform: 'uppercase',
+            letterSpacing: '0.15em',
+            color: colors.warmGray,
+          }}
         >
           Scroll to explore
         </span>
       </motion.div>
+
+      {/* Responsive CSS - injected as a style tag */}
+      <style>{`
+        @media (max-width: 1024px) {
+          .hero-container {
+            grid-template-columns: 1fr !important;
+            gap: 3rem !important;
+          }
+          .hero-content {
+            max-width: 100% !important;
+            text-align: center;
+          }
+          .hero-ctas {
+            justify-content: center;
+            flex-wrap: wrap;
+          }
+          .hero-stats {
+            justify-content: center;
+          }
+          .hero-visual {
+            max-width: 600px;
+            margin: 0 auto;
+          }
+          .floating-card {
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            bottom: -15px !important;
+          }
+        }
+        @media (max-width: 640px) {
+          .hero-container {
+            padding: 0 1rem !important;
+          }
+          .hero-ctas {
+            flex-direction: column;
+          }
+          .hero-ctas > a {
+            width: 100%;
+            justify-content: center;
+          }
+          .hero-stats {
+            flex-wrap: wrap;
+            gap: 1.5rem !important;
+          }
+          .stat-divider {
+            display: none;
+          }
+          .hero-image {
+            height: 350px !important;
+          }
+          .scroll-indicator {
+            display: none !important;
+          }
+        }
+        @keyframes scrollPulse {
+          0%, 100% { opacity: 0.3; transform: scaleY(1); }
+          50% { opacity: 1; transform: scaleY(1.2); }
+        }
+      `}</style>
     </section>
   )
 }
