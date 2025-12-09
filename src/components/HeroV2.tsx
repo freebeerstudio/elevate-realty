@@ -1,18 +1,29 @@
 /**
- * Hero Component - Tailwind 4 Version
+ * Hero Component - Tailwind Version
  *
  * BEFORE: Hero.tsx (145 lines) + Hero.module.css (350 lines) = 495 lines total
- * AFTER: HeroV2.tsx (155 lines) = 155 lines total (68% reduction)
+ * AFTER: HeroV2.tsx (~180 lines) = single file with co-located styles
  *
  * Key improvements:
  * 1. Styles co-located with markup - no mental context switching
- * 2. Design tokens in CSS variables, used via Tailwind utilities
- * 3. Responsive built into class names (lg:, md:, sm:)
- * 4. Same visual output, 3x less code
+ * 2. Responsive built into class names (lg:, md:, sm:)
+ * 3. Same visual output, single file
  */
 
 import { motion } from 'framer-motion'
 import { ArrowRight, Play, MapPin, Star } from 'lucide-react'
+
+// Brand colors as constants (in production, these come from tailwind.config)
+const colors = {
+  forest: '#1a3a3a',
+  forestLight: '#2a5454',
+  gold: '#d4a853',
+  goldLight: '#e8c77a',
+  cream: '#faf8f5',
+  creamDark: '#f0ede8',
+  charcoal: '#1c1c1c',
+  warmGray: '#6b6560',
+}
 
 // Animation variants - reusable across components
 const fadeInUp = {
@@ -26,7 +37,7 @@ const staggerContainer = {
   },
 }
 
-// Stats data - could come from CMS or props
+// Stats data
 const stats = [
   { value: '$100M+', label: 'In Sales' },
   { value: '500+', label: 'Happy Families' },
@@ -35,20 +46,20 @@ const stats = [
 
 export function HeroV2() {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden py-32 lg:py-24">
-      {/* Background layers */}
+    <section
+      className="relative min-h-screen flex items-center overflow-hidden"
+      style={{
+        padding: '8rem 0 4rem',
+        background: `
+          radial-gradient(ellipse at 20% 80%, rgba(212, 168, 83, 0.08) 0%, transparent 50%),
+          radial-gradient(ellipse at 80% 20%, rgba(26, 58, 58, 0.05) 0%, transparent 50%),
+          linear-gradient(180deg, ${colors.cream} 0%, ${colors.creamDark} 100%)
+        `,
+      }}
+    >
+      {/* Grid pattern overlay */}
       <div
-        className="absolute inset-0"
-        style={{
-          background: `
-            radial-gradient(ellipse at 20% 80%, rgba(212, 168, 83, 0.08) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 20%, rgba(26, 58, 58, 0.05) 0%, transparent 50%),
-            linear-gradient(180deg, var(--color-cream) 0%, var(--color-cream-dark) 100%)
-          `,
-        }}
-      />
-      <div
-        className="absolute inset-0 opacity-30"
+        className="absolute inset-0 opacity-30 pointer-events-none"
         style={{
           backgroundImage: 'linear-gradient(rgba(26,58,58,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(26,58,58,0.03) 1px, transparent 1px)',
           backgroundSize: '60px 60px',
@@ -57,128 +68,192 @@ export function HeroV2() {
       />
 
       {/* Main content */}
-      <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-        {/* Left column - Content */}
-        <motion.div
-          variants={staggerContainer}
-          initial="initial"
-          animate="animate"
-          className="max-w-xl lg:max-w-[600px] text-center lg:text-left"
-        >
-          {/* Trust badge */}
+      <div className="relative z-10 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* Left column - Content */}
           <motion.div
-            variants={fadeInUp}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium mb-6
-                       bg-[--color-forest]/[0.08] border border-[--color-forest]/10 text-[--color-forest]"
+            variants={staggerContainer}
+            initial="initial"
+            animate="animate"
+            className="max-w-xl lg:max-w-[600px] text-center lg:text-left"
           >
-            <Star className="w-3.5 h-3.5 text-[--color-gold]" />
-            Trusted by 500+ families in Southwest Missouri
-          </motion.div>
-
-          {/* Headline */}
-          <motion.h1
-            variants={fadeInUp}
-            transition={{ duration: 0.8 }}
-            className="font-[family-name:var(--font-display)] text-[clamp(2rem,5vw,4rem)] font-medium leading-[1.1] tracking-tight text-[--color-charcoal] mb-6"
-          >
-            Your Journey to the
-            <span className="text-[--color-forest] highlight-underline"> Perfect Home</span>
-            <br />Starts Here
-          </motion.h1>
-
-          {/* Subheadline */}
-          <motion.p
-            variants={fadeInUp}
-            transition={{ duration: 0.6 }}
-            className="text-lg text-[--color-warm-gray] leading-relaxed mb-8 max-w-[520px] mx-auto lg:mx-0"
-          >
-            Elevate Real Estate Group delivers personalized solutions for buying and
-            selling homes in Springfield and surrounding communities. Experience real
-            estate done differently.
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div variants={fadeInUp} transition={{ duration: 0.6 }} className="flex flex-wrap justify-center lg:justify-start gap-4 mb-12">
-            <motion.a
-              href="#contact"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold text-white
-                         bg-gradient-to-br from-[--color-forest] to-[--color-forest-light]
-                         shadow-[0_8px_30px_rgba(26,58,58,0.25)] hover:shadow-[0_12px_40px_rgba(26,58,58,0.35)]
-                         transition-shadow duration-300"
+            {/* Trust badge */}
+            <motion.div
+              variants={fadeInUp}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium mb-6"
+              style={{
+                backgroundColor: `${colors.forest}10`,
+                border: `1px solid ${colors.forest}15`,
+                color: colors.forest,
+              }}
             >
-              Start Your Search
-              <ArrowRight className="w-4 h-4" />
-            </motion.a>
-            <motion.a
-              href="#about"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="inline-flex items-center gap-3 px-6 py-4 rounded-xl font-medium
-                         border-2 border-[--color-cream-dark] hover:border-[--color-gold] hover:bg-[--color-gold]/5
-                         transition-colors duration-300"
-            >
-              <Play className="w-4 h-4" />
-              Watch Our Story
-            </motion.a>
-          </motion.div>
+              <Star className="w-3.5 h-3.5" style={{ color: colors.gold }} />
+              Trusted by 500+ families in Southwest Missouri
+            </motion.div>
 
-          {/* Stats */}
-          <motion.div
-            variants={fadeInUp}
-            transition={{ duration: 0.6 }}
-            className="flex items-center justify-center lg:justify-start gap-8 pt-6 border-t border-[--color-cream-dark]"
-          >
-            {stats.map((stat, i) => (
-              <div key={stat.label} className="flex items-center gap-8">
-                {i > 0 && <div className="hidden sm:block w-px h-10 bg-[--color-cream-dark]" />}
-                <div className="flex flex-col">
-                  <span className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[--color-forest]">
-                    {stat.value}
-                  </span>
-                  <span className="text-xs uppercase tracking-wider text-[--color-warm-gray] mt-1">
-                    {stat.label}
-                  </span>
+            {/* Headline */}
+            <motion.h1
+              variants={fadeInUp}
+              transition={{ duration: 0.8 }}
+              className="text-4xl sm:text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tight mb-6"
+              style={{
+                fontFamily: "'Playfair Display', Georgia, serif",
+                color: colors.charcoal,
+              }}
+            >
+              Your Journey to the
+              <span className="relative" style={{ color: colors.forest }}>
+                {' '}Perfect Home
+                <span
+                  className="absolute bottom-1 left-0 right-0 h-3 -z-10"
+                  style={{
+                    background: `linear-gradient(90deg, ${colors.gold}, ${colors.goldLight})`,
+                    opacity: 0.3,
+                  }}
+                />
+              </span>
+              <br />Starts Here
+            </motion.h1>
+
+            {/* Subheadline */}
+            <motion.p
+              variants={fadeInUp}
+              transition={{ duration: 0.6 }}
+              className="text-lg leading-relaxed mb-8 max-w-[520px] mx-auto lg:mx-0"
+              style={{ color: colors.warmGray }}
+            >
+              Elevate Real Estate Group delivers personalized solutions for buying and
+              selling homes in Springfield and surrounding communities. Experience real
+              estate done differently.
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div
+              variants={fadeInUp}
+              transition={{ duration: 0.6 }}
+              className="flex flex-col sm:flex-row flex-wrap justify-center lg:justify-start gap-4 mb-12"
+            >
+              <motion.a
+                href="#contact"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-semibold text-white transition-shadow duration-300"
+                style={{
+                  background: `linear-gradient(135deg, ${colors.forest} 0%, ${colors.forestLight} 100%)`,
+                  boxShadow: '0 8px 30px rgba(26, 58, 58, 0.25)',
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 12px 40px rgba(26, 58, 58, 0.35)'}
+                onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 8px 30px rgba(26, 58, 58, 0.25)'}
+              >
+                Start Your Search
+                <ArrowRight className="w-4 h-4" />
+              </motion.a>
+              <motion.a
+                href="#about"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="inline-flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-medium transition-colors duration-300"
+                style={{
+                  border: `2px solid ${colors.creamDark}`,
+                  color: colors.charcoal,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = colors.gold
+                  e.currentTarget.style.backgroundColor = `${colors.gold}10`
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = colors.creamDark
+                  e.currentTarget.style.backgroundColor = 'transparent'
+                }}
+              >
+                <Play className="w-4 h-4" />
+                Watch Our Story
+              </motion.a>
+            </motion.div>
+
+            {/* Stats */}
+            <motion.div
+              variants={fadeInUp}
+              transition={{ duration: 0.6 }}
+              className="flex items-center justify-center lg:justify-start gap-6 sm:gap-8 pt-6"
+              style={{ borderTop: `1px solid ${colors.creamDark}` }}
+            >
+              {stats.map((stat, i) => (
+                <div key={stat.label} className="flex items-center gap-6 sm:gap-8">
+                  {i > 0 && (
+                    <div
+                      className="hidden sm:block w-px h-10"
+                      style={{ backgroundColor: colors.creamDark }}
+                    />
+                  )}
+                  <div className="flex flex-col items-center lg:items-start">
+                    <span
+                      className="text-xl sm:text-2xl font-semibold"
+                      style={{
+                        fontFamily: "'Playfair Display', Georgia, serif",
+                        color: colors.forest,
+                      }}
+                    >
+                      {stat.value}
+                    </span>
+                    <span
+                      className="text-[10px] sm:text-xs uppercase tracking-wider mt-1"
+                      style={{ color: colors.warmGray }}
+                    >
+                      {stat.label}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </motion.div>
           </motion.div>
-        </motion.div>
 
-        {/* Right column - Visual */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.4 }}
-          className="relative max-w-[600px] mx-auto lg:max-w-none"
-        >
-          <div className="relative rounded-3xl overflow-hidden shadow-[0_30px_80px_rgba(26,58,58,0.2)]">
-            <img
-              src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-              alt="Beautiful modern home in Springfield"
-              className="w-full h-[350px] sm:h-[450px] lg:h-[550px] object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[--color-forest]/40 via-transparent to-transparent" />
-          </div>
-
-          {/* Floating card */}
+          {/* Right column - Visual */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 1.1 }}
-            className="absolute -bottom-4 left-1/2 -translate-x-1/2 lg:left-auto lg:-left-8 lg:translate-x-0
-                       flex items-center gap-4 bg-white px-5 py-4 rounded-2xl
-                       shadow-[0_15px_50px_rgba(26,58,58,0.15)]"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.4 }}
+            className="relative max-w-[600px] mx-auto lg:max-w-none"
           >
-            <MapPin className="w-5 h-5 text-[--color-gold]" />
-            <div>
-              <span className="block font-semibold text-[--color-charcoal]">Springfield, MO</span>
-              <span className="block text-sm text-[--color-warm-gray]">& Surrounding Areas</span>
+            <div
+              className="relative rounded-3xl overflow-hidden"
+              style={{ boxShadow: '0 30px 80px rgba(26, 58, 58, 0.2)' }}
+            >
+              <img
+                src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                alt="Beautiful modern home in Springfield"
+                className="w-full object-cover"
+                style={{ height: 'clamp(350px, 50vw, 550px)' }}
+              />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background: `linear-gradient(180deg, transparent 60%, ${colors.forest}66 100%)`,
+                }}
+              />
             </div>
+
+            {/* Floating card */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 1.1 }}
+              className="absolute -bottom-5 left-1/2 -translate-x-1/2 lg:left-auto lg:-left-8 lg:translate-x-0 flex items-center gap-4 bg-white px-5 py-4 rounded-2xl"
+              style={{ boxShadow: '0 15px 50px rgba(26, 58, 58, 0.15)' }}
+            >
+              <MapPin className="w-5 h-5" style={{ color: colors.gold }} />
+              <div>
+                <span className="block font-semibold" style={{ color: colors.charcoal }}>
+                  Springfield, MO
+                </span>
+                <span className="block text-sm" style={{ color: colors.warmGray }}>
+                  & Surrounding Areas
+                </span>
+              </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Scroll indicator */}
@@ -188,8 +263,19 @@ export function HeroV2() {
         transition={{ delay: 1.5 }}
         className="hidden sm:flex absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-3"
       >
-        <div className="w-px h-10 bg-gradient-to-b from-[--color-forest] to-transparent animate-scroll-pulse" />
-        <span className="text-[10px] uppercase tracking-[0.15em] text-[--color-warm-gray]">Scroll to explore</span>
+        <div
+          className="w-px h-10"
+          style={{
+            background: `linear-gradient(180deg, ${colors.forest}, transparent)`,
+            animation: 'scrollPulse 2s ease-in-out infinite',
+          }}
+        />
+        <span
+          className="text-[10px] uppercase tracking-widest"
+          style={{ color: colors.warmGray }}
+        >
+          Scroll to explore
+        </span>
       </motion.div>
     </section>
   )
